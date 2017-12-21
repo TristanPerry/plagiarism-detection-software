@@ -1,0 +1,40 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}products{% endblock %}
+
+{% block title %}Features &amp; Screenshots{% endblock %}
+
+{% block desc %}Our high tech Plagiarism Guard service helps you to easily find plagiarism of your content and mitigate the effects of content theft. Learn more.{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Read More</h2>
+        </header>
+        {% include 'plag/common/products_links.html' %}
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Features &amp; Screenshots</h1>
+    <p>Our high tech Plagiarism Guard service helps you to easily find plagiarism of your content and mitigate the effects of content theft.</p>
+    <img src="{% static 'plag/img/Homepage_thumb.jpg'%}" width="300" height="254" class="lightboxImg imgFloatL" data-full-url="{% static 'plag/img/Homepage_full.jpg'%}" alt="Account homepage" />
+    <p><strong>Flexible</strong> - Our software supports a range of content types and it can scan your content as often as you like, allowing you to customize our plagiarism detection to suit your needs.</p>
+    <p><strong>Speed</strong> - We strive to make our service as fast &amp; efficient as possible. Our service starts scanning your content within seconds of your order, and any results we uncover are reported straight away. This allows you to constantly keep track of any plagiarism, and promptly protect your intellectual property.</p>
+    <p><strong>Low Prices</strong> - Even though our plagiarism detection software is very effective, thanks to constant technological improvements we are able to offer <a href="{% url 'pricing' %}">fair, low pricing</a>. Plagiarism Guard offers lower prices than many of our competitors.</p>
+    <img src="{% static 'plag/img/ScanResults_thumb.jpg'%}" width="300" height="267" class="lightboxImg imgFloatR" data-full-url="{% static 'plag/img/ScanResults_full.jpg'%}" alt="Scan results 1" />
+    <p><strong>Easy to Understand Reporting</strong> - Any plagiarism results we find are reported to you in a clear manner, allowing you to easily see where and when content theft is occurring. The plagiarism per month graph on the account homepage allows you to keep track of your content's plagiarism trends.</p>
+    <p><strong>Unique Technology</strong> - Our unique technology can protect a range of content sources, from web pages through to PDFs and Powerpoint presentations. We compare your content with up to billions of other items of content, looking for any and all instances of plagiarism.  We employ False Positive Protection to filter out any invalid plagiarism results, meaning that you will only see genuine cases of content theft (this feature is enabled by default but can be disabled if you'd like).</p>
+    <img src="{% static 'plag/img/ScanResults2_thumb.jpg'%}" width="300" height="267" class="lightboxImg imgFloatL" data-full-url="{% static 'plag/img/ScanResults2_full.jpg'%}" alt="Scan results 2" />
+    <p><strong>Reliable &amp; Constant Protection</strong> - Our service is powered by a range of servers and is built with uptime in mind, meaning that Plagiarism Guard is available 24/7/365.</p>
+    <p><strong>Full Results</strong> - Whilst our homepage trial limits the number of results you can see, our paid-for service shows you all results that we find. Your account also stores a complete history of results from previous scans, allowing you to track plagiarism as far back as you want.</p>
+
+    <br /><br />
+    {% include 'plag/common/order_call_to_action.html' %}
+{% endblock %}
+
+
+{% block otherelements %}
+    {% include 'plag/common/lightbox.html' %}
+{% endblock %}

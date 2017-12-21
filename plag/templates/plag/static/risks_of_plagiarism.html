@@ -1,0 +1,81 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}products{% endblock %}
+
+{% block title %}Risks of plagiarism{% endblock %}
+
+{% block desc %}Here we look at the various risks of plagiarism, and who it affects - from companies and colleges through to bloggers and students.{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled hide-small-screen">
+        <header>
+            <h2>Contents</h2>
+        </header>
+        <ul>
+            <li><a href="#risks">Risks of Plagiarism</a></li>
+            <li><a href="#affects">Who Plagiarism Affects</a></li>
+            <li><a href="#protect">Protect Your Content &amp; Hard Work</a></li>
+            <li><a href="#sources">Sources</a></li>
+        </ul>
+    </section>
+    <section class="box-titled">
+        <header>
+            <h2>Read More</h2>
+        </header>
+        {% include 'plag/common/products_links.html' %}
+    </section>
+{% endblock %}
+
+{% block content %}
+    <a name="risks"></a><h1>Risks of Plagiarism</h1>
+    <p>As our <a href="{% url 'index' %}">homepage</a> alludes to, at least 23% of all content is plagiarized and/or infringes on copyright<sup><a href="#stat1">[1]</a></sup>. This sad statistic is indicative of an internet which is plagued by copyright infringement (albeit being an amazing resource overall).</p>
+    <p>And unfortunately plagiarism is a growing problem. 55% of college presidents think that plagiarism has increased<sup><a href="#stat2">[2]</a></sup> and the news &amp; media routinely report on alleged plagiarism<sup><a href="#stat3">[3]</a></sup><sup><a href="#stat4">[4]</a></sup><sup><a href="#stat5">[5]</a></sup><sup><a href="#stat6">[6]</a></sup><sup><a href="#stat7">[7]</a></sup>. All content producers are harmed by plagiarism:</p>
+    <a name="affects"></a><h2>Who Plagiarism Affects</h2>
+    <ul class="imageList">
+        <li><img src="{% static 'plag/img/Cust_Writer.jpg' %}" alt="Journalist" class="imgFloatL" />
+            <span><strong>Writers, Authors &amp; Journalists</strong> - Whether you are a budding writer or a professional author/journalist, plagiarism is a massive risk to your livelihood.<br /><br />
+            People might steal your content and rewrite parts of it without attribution, or they might even plagiarise the whole piece and claim it as their own. In the worst case, people might see the plagiarised copy and think that <em>you</em> plagiarised <em>their</em> work!</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_WebOwner.jpg' %}" alt="Website owner" class="imgFloatR" />
+            <span><strong>Website Owners &amp; Bloggers</strong> - Good quality content is paramount to any website &amp; blog - to draw visitors in, to keep them coming back, and helping secure a solid search engine rank.<br /><br />
+            However plagiarism of your content can devalue your site by harming your site's uniqueness and cutting edge (since it looks like the person who plagiarised your content 'got there first'), and may even harm your search engine rank.<sup><a href="#stat8">[8]</a></sup></span>
+        </li>
+        <li><img src="{% static 'plag/img/Cust_Students.jpg' %}" alt="Students" class="imgFloatL" />
+            <span><strong>Students</strong> - The majority of Colleges and Universities now employ plagiarism detection software<sup><a href="#stat9">[9]</a></sup>. And even if - like most students - you are honest and do not plagiarise, it is still possible to accidentally leave sentence fragments in your academic work that is too similar to other sources (such as textbooks or online sources).<br /><br />
+            Hence it makes sense to run your essays and coursework through our plagiarism detection software to ensure that you never fall foul of academic integrity.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_Company.jpg' %}" alt="Offices" class="imgFloatR" />
+            <span><strong>Companies</strong> - Whether it's company secrets or boilerplate-esque business literature, it is imperative for companies to protect their written Intellectual Property.<br /><br />
+            Failing to do so may undermine the business, make the company look like it uses unoriginal content or in the worse case, allow rivals to gain a competitive edge.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_SEO.jpg' %}" alt="SEO" class="imgFloatL" />
+            <span><strong>SEOs</strong> - Whilst search engines take steps to mitigate negative search engine effects from duplicate content, websites can still get adversely impacted by their content being plagiarised and stolen.<br /><br />
+            This is especially true for newer websites and blogs, since your content might be stolen and put onto another website before the search engines scan your site. In this case, search engines such as Google might think that you copied the other site's content (albeit the reverse is true)!</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_College.jpg' %}" alt="Princeton University" class="imgFloatR" />
+            <span><strong>Colleges &amp; Teachers</strong> - As mentioned at the beginning, plagiarism is an ongoing and seemingly ever increasing problem - especially within academia. It is crucial to clamp down on plagiarism to defend the reputation of the College/Department and ensure that academic robustness is upheld.<br /><br />
+            However thanks to the power of the internet, detecting plagiarism has much lower barrier of entries (and costs) than previously was the case.</span>
+        </li>
+    </ul>
+    <a name="protect"></a><h2>Protect Your Content &amp; Hard Work</h2>
+    <p>Fortunately Plagiarism Guard makes it easy to discover people who are looking to rip off your hard work. After <a href="{% url 'order' %}">ordering</a>, we'll start scanning for possible instances of plagiarism within seconds. And any results will be displayed to you instantly, allowing you to take action.</p>
+    {% include 'plag/common/order_call_to_action.html' %}
+    <br /><hr />
+    <a name="sources"></a><h2>Sources</h2>
+    <ul class="small">
+        <li><a name="stat1"></a>[1] - 23.76% is the overall percentage of internet use which infringes on copyright, as per <a href="http://documents.envisional.com/docs/Envisional-Internet_Usage-Jan2011.pdf" target="_blank">Envisional's Internet Usage Report, 2011</a>. Other sources put the percentage higher. <a href="http://turnitin.com/en_us/component/content/article/421-us-categories/blog/general/1658-plagiarism-in-the-digital-age-infographic" target="_blank">Turnitin</a> statistics show that 33.33% (1 in 3) of students have plagiarised content, whilst <a href="http://www.plagspotter.com/" target="_blank">Plagspotter's</a> daily % of plagiarism is routinely >40%.</li>
+        <li><a name="stat2"></a>[2] - <a href="http://turnitin.com/en_int/resources/blog/421-general/1660-plagiarism-report-infographic" target="_blank">Turnitin Plagiarism Report, 2011</a>.</li>
+        <li><a name="stat3"></a>[3] - <a href="http://www.theguardian.com/books/2013/sep/24/cj-allen-poem-forward-prize-plagiarism" target="_blank">The Guardian, "Poem pulled from Forward prize shortlist after plagiarism row", 24 Sept 2013</a>.</li>
+        <li><a name="stat4"></a>[4] - <a href="http://www.bbc.co.uk/news/blogs-echochambers-28571561" target="_blank">BBC, "Much ado about Buzzfeed's plagiarism", 30 July 2014</a>.</li>
+        <li><a name="stat5"></a>[5] - <a href="http://www.nytimes.com/2014/07/24/us/politics/montana-senator-john-walsh-plagiarized-thesis.html?_r=1" target="_blank">NY Times, "Senator’s Thesis Turns Out to Be Remix of Others’ Works, Uncited", July 23 2014</a>.</li>
+        <li><a name="stat6"></a>[6] - <a href="http://pescanik.net/2014/06/getting-a-phd-in-serbia-the-case-of-minister-stefanovic/" target="_blank">Pescanik, "Getting a PhD in Serbia: the case of minister Stefanović", 02 June 2014</a>.</li>
+        <li><a name="stat7"></a>[7] - <a href="http://www.dw.de/german-ex-education-minister-schavan-loses-plagiarism-appeal/a-17511623" target="_blank">DW, "German ex-Education Minister Schavan loses plagiarism appeal", 20 March 2014</a>.</li>
+        <li><a name="stat8"></a>[8] - <a href="http://www.seoblog.com/2014/06/recover-duplicate-content-penalty/" target="_blank">SEO Blog, "How to Recover from a Duplicate Content Penalty", 08 June 2014</a>.</li>
+        <li><a name="stat9"></a>[9] - <a href="http://turnitin.com/en_us/customers/college-and-university" target="_blank">Turnitin, "Colleges &amp; University", 11 Sept 2014</a>.</li>
+    </ul>
+{% endblock %}

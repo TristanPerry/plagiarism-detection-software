@@ -1,0 +1,18 @@
+{% extends 'plag/base.html' %}
+
+{% block title %}Sitemap{% endblock %}
+
+{% block desc %}A list of the various pages on the Plagiarism Guard website.{% endblock %}
+
+{% block content %}
+    <h1>Sitemap</h1>
+    <p>Todo.</p>
+    <ul>
+        {% include 'plag/common/website_links.html' %}
+        <li><a href="https://blog.plagiarismguard.com">Blog</a></li>
+        <li><a href="{% url 'sitemap' %}">Sitemap</a></li>
+        <li><a href="{% url 'terms_of_service' %}">Terms of Service</a></li>
+        <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+        <li><a href="{% url 'copyright' %}">Copyright</a></li>
+    </ul>
+{% endblock %}

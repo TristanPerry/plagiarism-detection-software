@@ -1,0 +1,71 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}about{% endblock %}
+
+{% block title %}About Us{% endblock %}
+
+{% block desc %}Our goal is simple: 'Help our customers protect their content by effectively detecting plagiarism'. This led to Plagiarism Guard.{% endblock %}
+
+{% block header_section %}
+    <style type="text/css">
+    #address {
+        display: inline-block;
+        position: relative;
+        top: -2em;
+        left: 0.5em;
+    }
+    </style>
+{% endblock %}
+
+{# TODO Add more content #}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Read More</h2>
+        </header>
+        {% include 'plag/common/about_links.html' %}
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>About Us</h1>
+    <p>In 2012 we had a simple goal: <em>Help our customers protect their content by effectively detecting plagiarism</em>. To meet this goal we developed Plagiarism Guard, an online system which automatically scans content and flags up suspected cases of plagiarism.</p>
+    <p>Our founder <span itemscope itemtype="http://data-vocabulary.org/Person"><a href="http://www.tristanperry.com/" itemprop="url"><span itemprop="name">Tristan Perry</span></a></span> is a software developer with a passion for plagiarism detection, natural language processing and computational linguistics.</p>
+    <p>We are continuously making improvements to our software and we are one of the most flexible plagiarism detection companies, supporting a range of content types and allowing you to choose how frequently your content is scanned.</p>
+    <p>Plagiarism Guard is based in the United Kingdom and we have customers from around the World. Please feel free to <a href="{% url 'contact' %}">contact us</a> if you have any questions, comments or suggestions.</p>
+    <h2>Address</h2>
+    <img src="{% static 'plag/img/AddressBook.png' %}" alt="x" class="imgFloatL" />
+    <p itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address" id="address">
+        Plagiarism Guard,<br />
+        <span itemprop="locality">Caerphilly</span>,<br />
+        <span itemprop="region">Wales</span>,<br />
+        <span itemprop="country-name">United Kingdom</span>,<br />
+        <span itemprop="postal-code">CF83</span><br />
+    +447505661762<br />
+    <script type="text/javascript" language="javascript">
+    <!--
+    // Email obfuscator script 2.1 by Tim Williams, University of Arizona
+    // Random encryption key feature by Andrew Moulden, Site Engineering Ltd
+    // This code is freeware provided these four comment lines remain intact
+    // A wizard to generate this code is at http://www.jottings.com/obfuscator/
+    { coded = "5gOF@mHpv5pV5QMvhpVc.6FM"
+      key = "ZUqmHvOy1ruWXcwtNaKn0GAQBxRMTLIDiVho763k2plgfjz94bEdYeSC58PFJs"
+      shift=coded.length
+      link=""
+      for (i=0; i<coded.length; i++) {
+        if (key.indexOf(coded.charAt(i))==-1) {
+          ltr = coded.charAt(i)
+          link += (ltr)
+        }
+        else {
+          ltr = (key.indexOf(coded.charAt(i))-shift+key.length) % key.length
+          link += (key.charAt(ltr))
+        }
+      }
+    document.write("<a href='mailto:"+link+"'>info@plagiarismguard.com</a>")
+    }
+    //-->
+    </script><noscript>Sorry, you need Javascript on to email me.</noscript></p>
+{% endblock %}

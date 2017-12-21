@@ -1,0 +1,11 @@
+{% load staticfiles %}
+<div class="box-cta" id="orderPrompt">
+    <div class="inner">
+        <p><img src="{% static 'plag/img/30DayGuarantee.png' %}" alt="30 day money back guarantee" />
+            Any questions? Please feel free to contact <a href="https://support.plagiarismguard.com/open.php">our sales department</a>.
+            <br />All orders have a 30 day money back guarantee.
+        </p>
+
+        <a href="{% url 'order' %}" class="button-big">Order</a>
+    </div>
+</div>

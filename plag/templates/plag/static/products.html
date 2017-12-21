@@ -1,0 +1,31 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}products{% endblock %}
+
+{% block title %}Our Products{% endblock %}
+
+{% block desc %}Take a look at the various ways that Plagiarism Guard can help you to turn the tide against plagiarists and content scrapers.{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Read More</h2>
+        </header>
+        {% include 'plag/common/products_links.html' %}
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Our Products</h1>
+    <p>Plagiarism Guard <a href="{% url 'features' %}">automatically protects your content</a> from plagiarism by regularly scanning it and reporting any instances of plagiarism to you.</p>
+    <img src="{% static 'plag/img/Homepage_thumb.jpg'%}" class="lightboxImg imgFloatL" data-full-url="{% static 'plag/img/Homepage_full.jpg'%}" alt="Homepage screenshot" />
+    <p>Our service supports a range of content types - <a href="{% url 'url_prot' %}">web pages</a>, <a href="{% url 'doc_prot' %}">Word documents, PDFs, Powerpoint presentations and text files</a>. You can choose to scan your content as frequently as you'd like - daily, weekly or monthly, allowing you to protect your content according to your exact needs.</p>
+    <p>Our <a href="{% url 'pricing' %}">low pricing</a> starts at just $3.50 per month and is the same for all types of content (our pricing is based on how frequently you'd like us to scan your content).</p>
+    <p>Plagiarism is an all-too-common issue for people who produce content and there are <a href="{% url 'risks_plag' %}">countless reasons</a> why safeguarding your content from content theft is paramount.</p>
+    {% include 'plag/common/order_call_to_action.html' %}
+
+    <h2>Bespoke Plagiarism Work</h2>
+    <p>Outside of our standard Plagiarism Guard service, we also offer bespoke plagiarism work. Whether it's tackling a particularly difficult plagiarism case, writing high quality, plagiarism-free content or something completely different, please feel free to <a href="{% url 'contact' %}">contact us</a> and see how we can help you.</p>
+
+{% endblock %}

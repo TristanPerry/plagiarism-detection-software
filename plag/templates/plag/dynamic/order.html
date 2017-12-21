@@ -1,0 +1,192 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}order{% endblock %}
+
+{% block title %}Place an Order{% endblock %}
+
+{% block desc %}Place an order via our secure and easy to use checkout, and start protecting your content from plagiarism{% endblock %}
+
+{% block header_section %}
+    <style type="text/css">
+    .box-titled h3 {
+        margin: 0.5em 0;
+    }
+    .box-titled h3:first-of-type {
+        margin-top: 0;
+    }
+    .box-titled h3:last-of-type {
+        margin-bottom: 0;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Place an Order</h1>
+    <p>Thanks for choosing us to protect your website and/or files against plagiarism and content theft. Getting started is easy - click 'Add resource to protect' to add a website address or file to protect,
+    or click 'Bulk import new URLs' to quickly import many website addresses.</p>
+
+    <form id="order_form" method="post" action="{% url 'order' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h2>Step 1 - Protect Your Content</h2>
+        <table id="prot_res_table" style="table-layout: fixed; width: 100%;">
+            <thead>
+                <th style="width: 75%;">Protected Resource</th>
+                <th style="width: 15%;">Scan Frequency</th>
+                <th style="width: 10%;"> </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="javascript:void(0);" onclick="addResource(this, 'after');" id="initalAddProtRes"><img src="{% static 'plag/icon/Add.png' %}" alt="Add" /> Add resource to protect</a>
+                        or
+                        <a href="javascript:void(0);" onclick="bulkAddURLs(this, 'after');"><img src="{% static 'plag/icon/BulkAdd.png' %}" alt="Bulk add" /> Bulk import new URLs</a>
+                    </td>
+                    <td colspan="2">
+                        <label for="setAllScanFreq" style="display: inline;">Set all:</label>
+                        <select name="setAllScanFreq" id="setAllScanFreq">
+                            {% for freq in scan_frequencies %}
+                                <option value="{{ freq.1 }}">{{ freq.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Step 2 - Create an Account</h2>
+        {{ user_form.as_p }}
+
+        <input type="hidden" name="numMaxNewProtRes" id="numNewProtRes" value="0" />
+        <button type="submit">Order</button>
+    </form>
+
+{% endblock %}
+
+{% block sidebar-content %}
+    <section id="orderSummary" class="box-titled">
+        <header>
+            <h2>Order Summary</h2>
+        </header>
+        <h3>Price</h3>
+        <span id="newPrice"></span>
+        <h3>Details</h3>
+        <ul id="orderBreakdown">
+
+        </ul>
+
+        <button type="submit">Order</button> or
+        <button type="cancel" id="cancelOrderChange">Cancel</button>
+    </section>
+{% endblock %}
+
+
+{% block otherelements %}
+    <section class="modal" id="bulkImportUrls">
+        <div class="closeButton">&#10006;</div>
+        <div class="content">
+            <label for="sitemapInput">Sitemap.xml location:</label>
+            <input name="sitemapInput" id="sitemapInput" value="" placeholder="http://your.website/sitemap.xml" size="40" />
+            <p><b>Or list URLs:</b></p>
+			<textarea name="bulkInput" id="bulkInput" rows="8" cols="45">http://www.example.org/page1.htm
+http://www.example.org/page2.htm
+http://www.example.org/page3.htm</textarea>
+
+            <br /><br />
+            <button type="button" id="bulkImportButton">
+                <img src="{% static 'plag/icon/AltAdd.png' %}" alt="x" />
+                Submit
+            </button>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block pagescripts %}
+    <script src="{% static 'plag/js/order.js' %}"></script>
+    <script id="addProtRes" type="text/x-jsrender">
+        <tr>
+            <td>
+                <input type="url" class="new_prot_res_url" name="new_prot_res_url" value="" size="40" placeholder="Enter a URL" />
+                <span> or </span>
+                <input type="file" class="new_prot_res_file" name="new_prot_res_file" accept="{{ accepted_file_exts }}" />
+            </td>
+            <td>
+                <select name="new_pros_res_scan_freq" class="scanFreqSelect">
+                    {% for freq in scan_frequencies %}
+                        <option value="{{ freq.1 }}">{{ freq.1 }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td align="center">
+                <a href="javascript:void(0);" onclick="deleteNewResource(this);"><img src="{% static 'plag/icon/Delete.png' %}" alt="Delete" /></a>
+            </td>
+        </tr>
+    </script>
+    <script id="addURL" type="text/x-jsrender">
+        <tr>
+            <td>
+                <input type="url" class="new_prot_res_url_single" name="new_prot_res_url" value="" size="60" placeholder="Enter a URL" />
+            </td>
+            <td>
+                <select name="new_pros_res_scan_freq" class="scanFreqSelect">
+                    {% for freq in scan_frequencies %}
+                        <option value="{{ freq.1 }}">{{ freq.1 }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td align="center">
+                <a href="javascript:void(0);" onclick="deleteNewResource(this);"><img src="{% static 'plag/icon/Delete.png' %}" alt="Delete" /></a>
+            </td>
+        </tr>
+    </script>
+    <script type="text/javascript">
+    var numDaily = 0;
+    var numWeekly = 0;
+    var numMonthly = 0;
+    var newFileUpload = '<input type="file" class="new_prot_res_file" name="new_prot_res_file" accept="{{ accepted_file_exts }}" />';
+    var currentPrice = 0.00;
+    var isNewOrder = true;
+    var tickIcon = '<img src="{% static 'plag/icon/Tick.png' %}" alt="x" class="validationIcon" />';
+    var crossIcon = '<img src="{% static 'plag/icon/Cross.png' %}" alt="x" class="validationIcon" />';
+    var editIcon = '<img src="{% static 'plag/icon/Edit.png' %}" alt="Edit" />';
+    var backIcon = '<img src="{% static 'plag/icon/Back.png' %}" alt="Back" id="backIcon" />';
+    var sitemapURL = "{% url 'ajax_urls' %}"
+    addResource($("#initalAddProtRes"), 'after');
+
+    $("#id_password1, #id_password2").bind("change keyup", function() {
+        $("#id_password2").parent().find(".validationIcon").remove();
+
+        var pass1 = $("#id_password1").val();
+        var pass2 = $("#id_password2").val();
+
+       if (pass1 && pass2 && pass1 !== pass2) {
+           $("#id_password2").after("&nbsp;"+crossIcon);
+       } else if (pass1 && pass2) {
+           $("#id_password2").after("&nbsp;"+tickIcon);
+       }
+    });
+
+    $(".order-username").bind("change", function() {
+        $(this).parent().children("img").remove();
+        var usernameVal = $(this).val();
+
+        if (usernameVal) {
+           $.ajax({
+              dataType: "json",
+              url: "{% url 'ajax_username_unique' %}",
+              data: {username: usernameVal},
+              async: true,
+              success: function(data) {
+                    if (data == true) {
+                        $(".order-username").after("&nbsp;"+tickIcon);
+                    } else {
+                        $(".order-username").after("&nbsp;"+crossIcon);
+                    }
+                }
+            });
+        }
+    });
+    </script>
+{% endblock %}

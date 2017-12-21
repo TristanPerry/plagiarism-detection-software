@@ -1,0 +1,97 @@
+{% extends 'plag/base_account.html' %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block title %}Recent Scans{% endblock %}
+
+{% block desc %}A look at all recent scans - and plagiarism finds - that we have recently undertaken.{% endblock %}
+
+{% block content %}
+    <h1>Recent Scans</h1>
+    <p>Currently showing results from the past
+        <select name="num_days" id="num_days_option">
+            {% for day in 31|get_range_from_one %}
+                <option value="{{ day }}"
+                        {% ifequal num_days|add:0 day %} selected="selected" {% endifequal %}
+                      >{{ day }}</option>
+            {% endfor %}
+        </select>
+    days.
+    {% if hide_zero %}
+        <a href="{% url 'recent_scans' num_days %}">Show all results</a>
+    {% else %}
+        <a href="{% url 'recent_scans_hide_zero' num_days 'hide-zero' %}">Only show results where plagiarism was found.</a>
+    {% endif %}.</p>
+
+    {% if results %}
+        <table style="table-layout: fixed; width: 100%;">
+            <thead>
+                <th>Protected Resource</th>
+                <th>Date Scanned</th>
+                <th># of Plagiarism Results</th>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td class="break">{{ result.protected_resource|clickable_prot_res|safe }}</td>
+                        <td>{{ result.timestamp }}</td>
+                        <td>{{ result.num_results }}</td>
+                    </tr>
+                    {% if result.num_results %}
+                    <tr id="scan_results_{{ result.id }}">
+                        <td colspan="3"><a href="javascript:void(0);" onclick="get_results(this, '{{ result.id }}');">View results</a></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>We haven't scanned your protected content in the last {{ num_days }} days. Please extend the search time above.</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{% static 'plag/js/jsrender.min.js' %}"></script>
+    <script src="{% static 'plag/js/jquery.tablesorter.min.js' %}"></script>
+    <script id="plagResultTmpl" type="text/x-jsrender">
+    {% verbatim %}
+      <tr>
+        <td class="break">{{:match_title}}</td>
+        <td class="break">{{:match_desc}}</td>
+        <td class="break"><a href="{{:match_url}}" target="_blank">{{:match_display_url}}</td>
+        <td>{{:perc_of_duplication}}%</td>
+      </tr>
+    {% endverbatim %}
+    </script>
+    <script type="text/javascript">
+    var plagResultStart = "<thead><tr><th>Title</th><th>Description</th><th>URL</th><th>% Duplication</th></tr></thead><tbody>";
+    var tmplPlagResultMain = $.templates("#plagResultTmpl");
+    var plagResultEnd = "</tbody></table>";
+
+    function get_results(tcell, scan_id) {
+        var trow = $(tcell).parent();
+        trow.html('<img src="{% static 'plag/icon/AjaxLoader.gif' %}" alt="Loading..." />');
+        $.ajax({
+            url: '{% url 'ajax_plag_results_default' %}' + scan_id,
+            type: 'get',
+            success: function(data) {
+                var tableId = 'id' + guid();
+                var tableStart = '<table id="' + tableId + '">';
+                var html = tableStart + plagResultStart + tmplPlagResultMain.render(data) + plagResultEnd;
+                trow.html(html);
+                $("#"+tableId).tablesorter();
+            },
+            failure: function(data) {
+                trow.html('Sorry, an error occurred. Please refresh the page and try again, or contact Support.');
+            }
+        });
+    }
+
+    $("#num_days_option").change(function() {
+        var base_url = "{% url 'recent_scans_default' %}";
+        var num_days = $("#num_days_option :selected").text();
+        window.location.replace(base_url + num_days);
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'plag/base.html' %}
+
+{% block title %}Copyright Information{% endblock %}
+
+{% block desc %}Plagiarism Guard's copyright policy and information.{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Last Amended</h2>
+        </header>
+        <p>This document was last amended on 01 November 2012.</p>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Copyright Information</h1>
+    <p>If you require any more information or have any questions about our copyright policy, please feel free to <a href="{% url 'contact' %}">contact us</a>.</p>
+    <p>All pages, content and other such media (including but not limited to the website design) on PlagiarismGuard.com is copyrighted &copy; to Plagiarism Guard (and thus the owner of PlagiarismGuard.com). All Rights Reserved.</p>
+    <p>All images on PlagiarismGuard.com are used with permission and with the proper licences, where applicable.</p>
+    <p>Copying, reproducing or duplicating any parts of Plagiarism Guard is not allowed without express permission from Plagiarism Guard. Please note that this notice isn't against Fair Use though: you are welcome to quote some of our content, as long as it is no longer than 3 paragraphs quoted and you give full credit to this website. If you would like to quote anything more than this, please <a href="{% url 'contact' %}">contact us</a> to ask for permission.</p>
+    <p>Whilst every effort is made to check the content on Plagiarism Guard, we can't check everything. Hence Plagiarism Guard cannot be held responsible for any incorrect content, slander, defamation or other content that may or may not damage any individual or party.</p>
+    <p>From time to time we might link to external websites (i.e. to websites which are not PlagiarismGuard.com). Plagiarism Guard is not responsible for the content on any sites we link to.</p>
+    <p>If you find any incorrect, invalid, copyrighted (or anything else) content on Plagiarism Guard, please <a href="{% url 'contact' %}">contact us</a> and we will contact you back as soon as possible. No challenge to any status is intended and your e-mail will be taken seriously.</p>
+{% endblock %}

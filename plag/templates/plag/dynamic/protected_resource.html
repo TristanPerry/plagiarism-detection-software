@@ -1,0 +1,216 @@
+{% extends 'plag/base_account.html' %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block header_section %}
+    <style type="text/css">
+    .url_input {
+        width: 18em;
+    }
+
+    #orderSummary {
+        box-sizing: border-box;
+        padding: 0.5em;
+        position: fixed;
+
+        top: 5%;
+
+        right: 0%;
+        width: 15%;
+        min-width: 175px;
+        max-width: 300px;
+
+        z-index: 9999;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+        border: 2px solid #999;
+        border-right: 0;
+        background-color: rgba(255, 255,255, 0.9);
+    }
+
+    #orderSummary #existingPrice, #orderSummary #newPrice {
+        font-size: 125%;
+    }
+
+    #orderSummary h2:first-child {
+        margin-top: 0;
+    }
+
+    #orderSummary h2 {
+        font-size: 160%;
+        border-bottom: 1px dashed #9C9C9C;
+        margin: 0.75em 0;
+    }
+    </style>
+{% endblock %}
+
+{% block title %}Your Protected Resources{% endblock %}
+
+{% block desc %}View the resources we are currently scanning and protecting for you, and add/remove/change them as necessary.{% endblock %}
+
+{% block content %}
+    <h1>Your Protected Resources</h1>
+
+    <p>Below is a list of resources (i.e. web pages and files) that we are currently protecting against plagiarism for you.
+        To change the resource being protected, or how often we scan it, simply click edit (<img src="{% static 'plag/icon/Edit.png' %}" alt="Edit" />) next to the resource.
+        Alternatively you can remove (<img src="{% static 'plag/icon/Delete.png' %}" alt="Delete" />) the resource,
+        or add (<img src="{% static 'plag/icon/Add.png' %}" alt="Add" />) an entirely new resource for us to protect.</p>
+
+    <form id="prot_res_form" method="post" action="{% url 'protected_resources' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if prot_res %}
+            <table id="prot_res_table" style="table-layout: fixed; width: 100%;">
+                <thead>
+                    <th style="width: 40%;">Protected Resource</th>
+                    <th style="width: 25%;">Last Scanned</th>
+                    <th style="width: 10%;">Number of Results</th>
+                    <th style="width: 15%;">Scan Frequency</th>
+                    <th style="width: 10%;"> </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5">
+                            <a href="javascript:void(0);" onclick="addResource(this, 'after');"><img src="{% static 'plag/icon/Add.png' %}" alt="Add" /> Add resource to protect</a>
+                            or
+                            <a href="javascript:void(0);" onclick="bulkAddURLs(this, 'after');"><img src="{% static 'plag/icon/BulkAdd.png' %}" alt="Bulk add" /> Bulk import new URLs</a>
+                        </td>
+                    </tr>
+                    {% for res in prot_res %}
+                        <tr id="tr_prot_res_{{ res.prot_res.id }}">
+                            <td class="break">
+                                <span>{{ res.prot_res|clickable_prot_res|safe }}</span>
+
+                                {% if res.prot_res.type == 'URL' %}
+                                    <input type="name" name="existing_prot_res_url_{{ res.prot_res.id }}" size="40" value="{{ res.prot_res.url }}" class="hide" />
+                                {% else %}
+                                    <div class="hide">
+                                        <input type="file" name="existing_prot_res_file_{{ res.prot_res.id }}" accept="{{ accepted_file_exts }}" />
+                                    </div>
+                                {% endif %}
+
+                                <input type="hidden" name="existing_prot_res_id" value="{{ res.prot_res.id }}" />
+                            </td>
+                            <td>{{ res.last_scanned }}</td>
+                            <td>{{ res.last_scanned_num }}</td>
+                            <td>
+                                <span>{{ res.scan_freq }}</span>
+
+                                <select name="existing_pros_res_scan_freq_{{ res.prot_res.id }}" class="hide scanFreqSelect">
+                                    {% for freq in scan_frequencies %}
+                                        <option value="{{ freq.1 }}" {% if res.scan_freq == freq.1 %}selected="selected"{% endif %}>{{ freq.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td class="center">
+                                <a class="editLink" href="javascript:void(0);" onclick="editResource('{{ res.prot_res.id }}');"><img src="{% static 'plag/icon/Edit.png' %}" alt="Edit" /></a>
+                                <a href="javascript:void(0);" onclick="deleteResource('{{ res.prot_res.id }}');"><img src="{% static 'plag/icon/Delete.png' %}" alt="Delete" /></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="5">
+                            <a href="javascript:void(0);" onclick="addResource(this, 'before');"><img src="{% static 'plag/icon/Add.png' %}" alt="Add" /> Add resource to protect</a>
+                            or
+                            <a href="javascript:void(0);" onclick="bulkAddURLs(this, 'after');"><img src="{% static 'plag/icon/BulkAdd.png' %}" alt="Bulk add" /> Bulk import new URLs</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <p>No active protected resources found. If you have recently placed an order, please check back after payment. Otherwise please contact Support.</p>
+        {% endif %}
+
+    <section id="orderSummary" class="hide">
+        <h2>Existing Price</h2>
+        <span id="existingPrice">{{ order|friendly_price|safe }}</span>
+        <h2>New Price</h2>
+        <span id="newPrice"></span>
+        <h2>Details</h2>
+        <ul id="orderBreakdown">
+
+        </ul>
+
+        <button type="submit">Confirm</button> or
+        <button type="cancel" id="cancelOrderChange">Cancel</button>
+    </section>
+
+    <input type="hidden" name="numMaxNewProtRes" id="numNewProtRes" value="0" />
+
+    </form>
+{% endblock %}
+
+
+{% block otherelements %}
+    <section class="modal" id="bulkImportUrls">
+        <div class="closeButton">&#10006;</div>
+        <div class="content">
+            <label for="sitemapInput">Sitemap.xml location:</label>
+            <input name="sitemapInput" id="sitemapInput" value="" placeholder="http://your.website/sitemap.xml" size="40" />
+            <p><b>Or list URLs:</b></p>
+			<textarea name="bulkInput" id="bulkInput" rows="8" cols="45">http://www.example.org/page1.htm
+http://www.example.org/page2.htm
+http://www.example.org/page3.htm</textarea>
+
+            <br /><br />
+            <button type="button" id="bulkImportButton">
+                <img src="{% static 'plag/icon/AltAdd.png' %}" alt="x" />
+                Submit
+            </button>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block pagescripts %}
+    <script src="{% static 'plag/js/order.js' %}"></script>
+    <script id="addProtRes" type="text/x-jsrender">
+        <tr>
+            <td colspan="3">
+                <input type="url" class="new_prot_res_url" name="new_prot_res_url" value="" size="40" placeholder="Enter a URL" />
+                <span> or </span>
+                <input type="file" class="new_prot_res_file" name="new_prot_res_file" accept="{{ accepted_file_exts }}" />
+            </td>
+            <td>
+                <select name="new_pros_res_scan_freq" class="scanFreqSelect">
+                    {% for freq in scan_frequencies %}
+                        <option value="{{ freq.1 }}">{{ freq.1 }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td align="center">
+                <a href="javascript:void(0);" onclick="deleteNewResource(this);"><img src="{% static 'plag/icon/Delete.png' %}" alt="Delete" /></a>
+            </td>
+        </tr>
+    </script>
+    <script id="addURL" type="text/x-jsrender">
+        <tr>
+            <td colspan="3">
+                <input type="url" class="new_prot_res_url_single" name="new_prot_res_url" value="" size="60" placeholder="Enter a URL" />
+            </td>
+            <td>
+                <select name="new_pros_res_scan_freq" class="scanFreqSelect">
+                    {% for freq in scan_frequencies %}
+                        <option value="{{ freq.1 }}">{{ freq.1 }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td align="center">
+                <a href="javascript:void(0);" onclick="deleteNewResource(this);"><img src="{% static 'plag/icon/Delete.png' %}" alt="Delete" /></a>
+            </td>
+        </tr>
+    </script>
+    <script type="text/javascript">
+    var numDaily = {{ numDaily }};
+    var numWeekly = {{ numWeekly }};
+    var numMonthly = {{ numMonthly }};
+    var newFileUpload = '<input type="file" class="new_prot_res_file" name="new_prot_res_file" accept="{{ accepted_file_exts }}" />';
+    var currentPrice = {{ order.price }};
+    var isNewOrder = false;
+    var sitemapURL = "{% url 'ajax_urls' %}"
+    var tickIcon = '<img src="{% static 'plag/icon/Tick.png' %}" alt="x" />';
+    var crossIcon = '<img src="{% static 'plag/icon/Cross.png' %}" alt="x" />';
+    var editIcon = '<img src="{% static 'plag/icon/Edit.png' %}" alt="Edit" />';
+    var backIcon = '<img src="{% static 'plag/icon/Back.png' %}" alt="Back" id="backIcon" />';
+    </script>
+{% endblock %}

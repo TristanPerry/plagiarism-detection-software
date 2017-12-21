@@ -1,0 +1,54 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}about{% endblock %}
+
+{% block title %}Our Customers{% endblock %}
+
+{% block desc %}Plagiarism Guard's automatic plagiarism and content theft detection service is used by a range of customers from various walks of life.{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Read More</h2>
+        </header>
+        {% include 'plag/common/about_links.html' %}
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Our Customers</h1>
+    <p>Plagiarism Guard's automatic plagiarism and content theft detection service is used by a range of customers from various walks of life:</p>
+    <ul class="imageList">
+        <li>
+            <img src="{% static 'plag/img/Cust_Company.jpg' %}" alt="Offices" class="imgFloatL" />
+            <span><strong>Companies</strong> - Companies &amp; businesses use us to protect everything from their company secrets to their publicly-available literature and adverts.<br /><br />
+            This allows them to safeguard against theft of their written Intellectual Property.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_SEO.jpg' %}" alt="SEO" class="imgFloatR" />
+            <span><strong>SEOs</strong> - Search engine optimizers use us to ensure that the content on the websites they are promoting is unique and free from plagiarism and content scrapers.<br /><br />
+            This helps them to promote their websites (since other websites haven't got very similar content) and avoid any possible duplicate content &amp; malicious plagiarism search engine penalties.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_College.jpg' %}" alt="Princeton University" class="imgFloatL" />
+            <span><strong>Colleges &amp; Teachers</strong> - To tackle the rise in plagiarism in academic work, the majority of Colleges &amp; Universities use plagiarism detection services.<br /><br />
+            This benefits Colleges and teachers by helping to protect the academic integrity of their courses.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_Writer.jpg' %}" alt="Journalist" class="imgFloatR" />
+            <span><strong>Writers, Authors &amp; Journalists</strong> - Whether amateur or professional, writers use us to ensure that their hard work is protected from content theft.<br /><br />
+            This ensures that their work cannot be bought into disrepute or considered to be wholly or in-part unoriginal.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_WebOwner.jpg' %}" alt="Website owner" class="imgFloatL" />
+            <span><strong>Website Owners &amp; Bloggers</strong> - Engaging and good quality content is the primary reason why internet users visit a website, and it is usually the main reason why users keep returning.<br /><br />
+            Website &amp; blog owners use us to secure their content and make sure that it is not being ripped off and put onto other website's without your permission. This helps to ensure that users keep coming back to your site.</span>
+        </li>
+        <li>
+            <img src="{% static 'plag/img/Cust_Students.jpg' %}" alt="Students" class="imgFloatR" />
+            <span><strong>Students</strong> - Students in high school and higher education use us to protect against the possibility that they have inadvertently used sentences, phrases &amp; paragraphs which are too similar to other sources.<br /><br />
+            This helps students to protect their academic integrity and not fall foul of any automated plagiarism detection systems used by their school/college.</span>
+        </li>
+    </ul>
+{% endblock %}

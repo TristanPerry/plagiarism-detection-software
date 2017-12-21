@@ -1,0 +1,10 @@
+{% extends 'plag/base.html' %}
+
+{% block title %}Login error{% endblock %}
+
+{% block content %}
+    <h1>DAMMIT, JACK!</h1>
+    {% if form.errors %}
+        <p class="error">Sorry, that's not a valid username or password</p>
+    {% endif %}
+{% endblock %}

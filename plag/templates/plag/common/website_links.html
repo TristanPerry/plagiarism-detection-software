@@ -1,0 +1,16 @@
+<li><a id="navhome" href="{% url 'index' %}">Home</a></li>
+<li>
+    <a id="navproducts" href="{% url 'products' %}">Products</a>
+    {% include 'plag/common/products_links.html' %}
+</li>
+<li><a id="navpricing" href="{% url 'pricing' %}">Pricing</a></li>
+<li>
+    <a id="navabout" href="{% url 'about' %}">About</a>
+    {% include 'plag/common/about_links.html' %}
+</li>
+{% if user.is_authenticated %}
+    <li><a id="navaccount" href="{% url 'account' %}">Account</a></li>
+{% else %}
+    <li><a id="navorder" href="{% url 'order' %}">Order</a></li>
+{% endif %}
+<li><a href="https://support.plagiarismguard.com/">Support</a></li>

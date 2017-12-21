@@ -1,0 +1,38 @@
+{% extends 'plag/base_account.html' %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block title %}Invoice #{{ invoice.id }}{% endblock %}
+
+{% block desc %}An invoice which you have paid previously, or need to pay.{% endblock %}
+
+{% block content %}
+    <h1>Invoice for {{ invoice|invoice_price|safe }}</h1>
+    <p>Please find details of invoice #{{ invoice.id }} below. This invoice was generated {{ invoice.created }}.</p>
+
+    <p><strong>{% if invoice.paid %}
+        Amount Paid:
+        {% else %}
+            Amount To Pay:
+        {% endif %}
+     {{ invoice|invoice_price|safe }}</strong></p>
+
+    <ul>
+        {{ invoice.explanation|safe }}
+    </ul>
+
+    {% if not invoice.paid %}
+        <br />
+        <a href="{% url 'pay_invoice' invoice.id %}">
+            <img src="{% static 'plag/img/PayPalBuyNow.gif' %}" alt="Pay now - one off payment" />
+        </a>
+
+        {% if not invoice.is_adjustment %}
+        <a href="{% url 'subscribe_invoice' invoice.id %}" style="margin-left: 3em;">
+            <img src="{% static 'plag/img/PayPalSubscribe.gif' %}" alt="Subscribe now - recurring payment" />
+        </a>
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}

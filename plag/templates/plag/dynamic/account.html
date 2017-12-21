@@ -1,0 +1,188 @@
+{% extends 'plag/base_account.html' %}
+{% load staticfiles %}
+{% load custom_tags %}
+
+{% block title %}Account{% endblock %}
+
+{% block desc %}Account{% endblock %}
+
+{% block header_section %}
+    <script src="{% static 'plag/js/Chart.min.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="{% static 'plag/js/excanvas.compiled.js' %}"></script>
+    <![endif]-->
+    <style type="text/css">
+    .chart h1 {
+        font-size: 175%;
+        border-bottom: 0;
+        margin: 1em 0 0.25em 0;
+    }
+
+    .pieChart canvas {
+        float: left;
+        margin-right: 3em;
+    }
+
+    .pieChart ul li {
+        display: block;
+        color: black;
+        font-weight: bold;
+        list-style-type: none;
+        margin: 0.75em;
+        margin-bottom: 0.5em;
+    }
+
+    .pieChart ul li:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .pieChart ul li span {
+        padding: 0.2em;
+    }
+
+    .chart:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome, {{ user|friendly_name }}</h1>
+
+    {% if stat_plag_summary_show == 'Login' %}
+        <p>Since your <a href="{% url 'recent_scans' num_days_since_login %}">last login</a>, we have scanned your protected content {{ stat_plag_summary_scans }} times.
+    {% elif stat_plag_summary_show == 'Month' %}
+        <p>In the <a href="{% url 'recent_scans' 30 %}">past month</a> we have scanned your protected content {{ stat_plag_summary_scans }} times.
+    {% else %}
+        <p>Please use the links to your right to manage your account and review your protected resources.</p>
+    {% endif %}
+
+    {% if stat_plag_summary_show %}
+        {% if stat_plag_summary_discovered %}
+           {{ stat_plag_summary_discovered }} instances of plagiarism has been discovered.
+        {% else %}
+            Thankfully we did not discover any plagiarism.
+        {% endif %}
+        </p>
+    {% endif %}
+
+    {% if graph_plag_summary_show %}
+        <section class="barChart chart">
+            <h1>Plagiarism per month</h1>
+            <canvas id="plagSummaryChart" width="700" height="350"></canvas>
+        </section>
+    {% endif %}
+
+    {% if graph_content_types_show %}
+        <section class="pieChart chart">
+            <h1>Types of protected resources</h1>
+            <canvas id="contentTypesChart" width="300" height="300"></canvas>
+            <ul id="contentTypesLegend">
+
+            </ul>
+        </section>
+    {% endif %}
+
+    {% if graph_scan_frequencies_show %}
+        <section class="pieChart chart">
+            <h1>Scan frequencies of protected resources</h1>
+            <canvas id="scanFreqsChart" width="300" height="300" style="margin-left: 5%"></canvas>
+            <ul id="scanFreqsLegend">
+
+            </ul>
+        </section>
+    {% endif %}
+
+    {% if unpaid_invoices %}
+        <h2>Unpaid Invoices</h2>
+        <ul>
+        {% for invoice in unpaid_invoices %}
+            <li><a href="{% url 'invoice' invoice.id %}">Invoice #{{ invoice.id }}</a> for {{ invoice|invoice_price|safe }} is currently unpaid. The invoice was generated {{ invoice.created }}.</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if paid_invoices %}
+        <hr />
+        <p><a href="javascript:void(0);" onclick="$(this).hide(); $('#prevInvoices').show(250);">Show previous invoices &raquo;</a></p>
+        <div id="prevInvoices" class="hide">
+        <h2>Previous Invoices</h2>
+        <ul>
+            {% for invoice in paid_invoices %}
+                <li><a href="{% url 'invoice' invoice.id %}">Invoice #{{ invoice.id }}</a> for {{ invoice|invoice_price|safe }} was paid {{ invoice.paid }}.</li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block pagescripts %}
+<script type="text/javascript">
+
+{% if graph_plag_summary_show %}
+    //Chart.defaults.global.responsive = true;
+    var data = {
+        labels: {{graph_plag_summary_labels|safe}},
+        datasets: [
+            {
+                label: "Plagiarism found per month",
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)",
+                data: {{graph_plag_summary_data|safe}}
+            }
+        ]
+    };
+
+    var ctx = $("#plagSummaryChart").get(0).getContext("2d");
+    var myLineChart = new Chart(ctx).Line(data);
+{% endif %}
+
+{% if graph_content_types_show %}
+    //Chart.defaults.global.responsive = true;
+    var data = [
+        {% for content in graph_content_types %}
+            {
+                value: {{ content.dcount }},
+                color: "{{ content.colour }}",
+                highlight: "{{ content.highlight }}",
+                label: "{{ content.type }}"
+            },
+        {% endfor %}
+    ];
+
+    var ctx = $("#contentTypesChart").get(0).getContext("2d");
+    var myPieChart = new Chart(ctx).Pie(data);
+    $("#contentTypesLegend").replaceWith(myPieChart.generateLegend());
+{% endif %}
+
+{% if graph_scan_frequencies_show %}
+    //Chart.defaults.global.responsive = true;
+    var data = [
+        {% for freq in graph_scan_frequencies %}
+            {
+                value: {{ freq.dcount }},
+                color: "{{ freq.colour }}",
+                highlight: "{{ freq.highlight }}",
+                label: "{{ freq.scan_frequency }}"
+            },
+        {% endfor %}
+    ];
+
+    var ctx = $("#scanFreqsChart").get(0).getContext("2d");
+    var myPieChart = new Chart(ctx).Pie(data);
+    $("#scanFreqsLegend").replaceWith(myPieChart.generateLegend());
+
+{% endif %}
+
+</script>
+
+{% endblock %}

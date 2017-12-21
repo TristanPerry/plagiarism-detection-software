@@ -1,0 +1,9 @@
+<form id="loginform" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+    <input id="id_username" maxlength="254" name="username" type="text" placeholder="Username" required aria-required="true"/>
+
+    <input id="id_password" name="password" type="password" placeholder="Password" required aria-required="true"/>
+
+    <input type="hidden" name="next" value="{{ request.get_full_path }}"/>
+    <input type="submit" value="Login"/>
+</form>

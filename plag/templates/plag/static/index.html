@@ -1,0 +1,90 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block header_section %}
+    <link rel="stylesheet" href="{% static 'plag/styles/home.css' %}">
+{% endblock %}
+
+{% block page_id %}index{% endblock %}
+
+{% block title %}Protect Against Content Theft{% endblock %}
+
+{% block splashintro %}
+    <section id="splashintro">
+        <h1>Did you know that 23% of all content is plagiarized?</h1>
+        <h2>Check that your content is safe via our free trial:</h2>
+        <form method="POST" action="{% url 'index_trial' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="url" name="url" size="41" value="" placeholder="Enter a URL" /> or
+            <input type="file" id="plagFile" name="plagFile" accept="{{ accepted_file_exts }}" />
+            <button type="submit" name="submit" id="scan">
+                Scan
+                <img src="{% static 'plag/icon/Padlock.gif' %}" alt="Secure" />
+            </button>
+        </form>
+        <ol>
+            <li>Enter a URL or file</li>
+            <li>Click 'Scan'</li>
+            <li>Discover plagiarism in seconds</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+    <br />
+    <section class="box-titled introboxes">
+        <header>
+            <h2><img src="{% static 'plag/icon/Cog.png' %}" alt="x" /> What We Do</h2>
+        </header>
+        <h3>We protect content from plagiarism</h3>
+        <p>We monitor content from a range of sources - websites, Word documents, PDFs and more - and compare them to billions of other items of content to detect plagiarism.</p>
+    </section>
+    <section class="box-titled introboxes">
+        <header>
+            <h2><img src="{% static 'plag/icon/People.png' %}" alt="x" /> Who We Are</h2>
+        </header>
+        <p>We opened in 2012 with a simple goal: <em>Help our customers protect their content by effectively detecting plagiarism</em>. We are based in the United Kingdom and our plagiarism detection services are used by web site owners, bloggers, writers and businesses small &amp; large.</p>
+    </section>
+    <section class="box-titled introboxes">
+        <header>
+            <h2><img src="{% static 'plag/icon/Tick2.png' %}" alt="x" /> Why Use Us</h2>
+        </header>
+        <p>Plagiarism is an all-too-common issue for people who produce content and there are <a href="{% url 'risks_plag' %}">countless reasons</a> why safeguarding your content from content theft is paramount. Our unique, high tech software diligently detects plagiarism and works 24/7/365 to keep your content safe.</p>
+    </section>
+    <br class="clear">
+    <p>At Plagiarism Guard we are proud to work with our customers to turn the tide against plagiarists and content scrapers. Our high tech software offers unparalleled automated protection for a range of content sources – be it a website, Word document, PDF, Powerpoint presentation or more. We regularly scan our customers' content and compare it to billions of other content sources from across the internet, and flag up any suspected cases of plagiarism and content theft.</p>
+    <p>Our service is completely online – there is no software to download. Simply tell us what content you’d like us to protect, and how often we should scan your content, and we take care of the rest. You can access your plagiarism results anywhere, anytime. Our low pricing starts at just $3.50 per month.</p>
+    <div class="box-cta">
+		<div class="inner">
+            <p>Learn more about <a href="{% url 'products' %}">our products</a> and check out <a href="{% url 'pricing' %}">our pricing</a>.<br />All orders have a 30 day money back guarantee.</p>
+
+            <a href="{% url 'order' %}" class="button-big">Let's get started!</a>
+		</div>
+    </div>
+{% endblock %}
+
+{% block pagescripts %}
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $('input[type="file"]').each(function(){
+        var btn = $('<button class="file">Select File...</button>');
+        var txt = $('<span class="file"></span>');
+        $(this).after(txt).after(btn);
+        $(this).css({display:'none'});
+        var target = this;
+        $(btn).click(function(ev){
+          ev.preventDefault();
+          $(target).click();
+        })
+        $(target).change(function(){
+          // IE uses a stupid renaming scheme that includes "fake-path"
+          var fname = $(target).val()
+          $(txt).html(fname.substr(fname.lastIndexOf('\\')+1));
+        });
+      });
+    });
+    </script>
+{% endblock %}

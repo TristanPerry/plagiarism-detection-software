@@ -1,0 +1,100 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}pricing{% endblock %}
+
+{% block title %}Our Pricing{% endblock %}
+
+{% block desc %}Our low pricing starts at just $3.50 per month and is the same for all types of content, whether you're protecting websites, Word documents, PDFs or more.{% endblock %}
+
+{% block header_section %}
+    <style type="text/css">
+    #newPrice {
+        font-size: 150%;
+        font-weight: bold;
+    }
+    </style>
+{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Summary</h2>
+        </header>
+        <h3>Simple, low pricing</h3>
+        <ul>
+            <li>Same price for websites and documents</li>
+            <li>Can scan daily, weekly, monthly or a mixture</li>
+            <li>30 day money back guarantee</li>
+            <li>$3.50 minimum order value</li>
+            <li><a href="{% url 'order' %}">Place your order today</a>.</li>
+        </ul>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Our Pricing</h1>
+    <p>Our low pricing starts at just $3.50 per month and is the same for all types of content, whether you're protecting websites, Word documents, PDFs or more.
+       Our pricing is based on how frequently you'd like us to scan your content - be it daily, weekly, monthly (or a mixture).</p>
+    <p>To calculate how much it'd cost to protect your content from plagiarism and content theft, simply choose how many website addresses (URLs) and/or files you want to protect below:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Scan Frequency</th>
+                <th>Number of URLs and Files</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="TableLabel">Daily</td>
+                <td><input id="daySlider" value="" size="23" placeholder="Number of daily scans" /></td>
+            </tr>
+            <tr>
+                <th class="TableLabel">Weekly</td>
+                <td><input id="weeklySlider" value="" size="23" placeholder="Number of weekly scans" /></td>
+            </tr>
+            <tr>
+                <th class="TableLabel">Monthly</td>
+                <td><input id="monthlySlider" value="" size="23" placeholder="Number of monthly scans" /></td>
+            </tr>
+            <tr>
+                <th class="TableLabel">Total</td>
+                <td id="newPrice">$</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="orderBreakdown" class="hide"></div>
+    {% include 'plag/common/order_call_to_action.html' %}
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{% static 'plag/js/order.js' %}"></script>
+    <script type="text/javascript">
+    var numDaily = 0;
+    var numWeekly = 0;
+    var numMonthly = 0;
+    $( document ).ready(function() {
+        $("#daySlider").change(function () {
+            updatePrice();
+        });
+        $("#weeklySlider").change(function () {
+            updatePrice();
+        });
+        $("#monthlySlider").change(function () {
+            updatePrice();
+        });
+    });
+    function updatePrice() {
+        if (!isNaN($("#daySlider").val())) {
+            numDaily = $("#daySlider").val();
+        }
+        if (!isNaN($("#weeklySlider").val())) {
+            numWeekly = $("#weeklySlider").val();
+        }
+        if (!isNaN($("#monthlySlider").val())) {
+            numMonthly = $("#monthlySlider").val();
+        }
+        calculatePrice();
+    }
+    </script>
+{% endblock %}

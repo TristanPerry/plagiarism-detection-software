@@ -1,0 +1,132 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block title %}Your Results{% endblock %}
+
+{% block desc %}The results from the free homepage trial of Plagiarism Guard{% endblock %}
+
+{% block header_section %}
+    <style type="text/css">
+    tr.falsePositive td {
+        background-color: #E0E0E0;
+	    color: #D4D4D4;
+    }
+    tr.falsePositive td a {
+        color: #D4D4D4;
+    }
+    </style>
+{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Results</h2>
+        </header>
+        <ul>
+            <li><span id="resultTotal">{{ scan_results|length }}</span> total results</li>
+            <li>
+                <span id="resultPostProcd">0</span> results post processed
+                <img src="{% static 'plag/icon/Help.png' %}" title="After getting back possible plagiarism results, we start post processing them (running the results through our False Positive Protection technology) to improve the quality of results" rel="tooltip" class="tooltip_img" />
+            </li>
+            <li class="falsePositiveMsg hide"><span class="resultFalsePos">0</span> false positives</li>
+        </ul>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Your Results</h1>
+    <p><span id="resultTotal">{{ scan_results|length }}</span> suspected cases of plagiarism and content theft have been discovered.</p>
+	<p class="falsePositiveMsg hide"><span class="resultFalsePos">0</span> false positive(s) have been identified. This means that after post-processing, we do not believe that this is a valid plagiarism match. False positives are filtered out behind the scenes and so they are not shown to our customers. <a href="javascript:void(0);" id="showHideFalsePos">Show the false positives anyway.</a></p>
+    {% if scan_results %}
+        <h2>Plagiarism results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Page Title</th>
+                    <th>Page Description</th>
+                    <th>Page URL</th>
+                    <th>% Duplication</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for result in scan_results %}
+                <tr>
+                    <td class="break">
+                        <input type="hidden" class="scanResult" name="scanResult" id="scanResult{{ result.id }}" value="{{ result.id }}" />
+                        {{ result.match_title }}
+                    </td>
+                    <td class="break">{{ result.match_desc }}</td>
+                    <td class="break"><a href="{{ result.match_url }}">{{ result.match_display_url }}</a></td>
+                    <td class="break"><img src="{% static 'plag/icon/AjaxLoader.gif' %}" alt="Loading..." /></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block pagescripts %}
+    {% if scan_results %}
+        <script type="text/javascript">
+        var numResults = {{ scan_results|length }};
+        var numPostProcd = 0;
+        var numFalsePos = 0;
+        var lid = {{ scan_log.id }};
+        var toScan = $(".scanResult");
+        var maxToScan = toScan.length;
+        var interval = -1;
+        var currIdx = 0;
+        var hideFalsePos = true;
+
+        function batchPostProcess() {
+            for( var i = currIdx; i <= currIdx+2; i++ ) {
+                if (i < maxToScan) {
+                    var element = toScan[i];
+                    $.ajax({
+                        dataType: "json",
+                        url: "{% url 'index_trial' %}",
+                        data: {id1: lid, id2: element.value},
+                        async: true,
+                        success: function(data) {
+                            var percDup = data.perc_dup;
+                            var row = $("#scanResult"+data.id).parent().parent();
+
+                            if(percDup < 0) {
+                                numFalsePos++;
+                                $('.falsePositiveMsg').show(250);
+                                $('.resultFalsePos').html(numFalsePos);
+
+                                if (hideFalsePos) {
+                                    row.addClass("falsePositive");
+                                }
+                                row.find('td:last').html('False positive');
+                            } else {
+                                row.find('td:last').html(percDup.toFixed(1)+"%");
+                            }
+                        }
+                    });
+
+
+                    $("#resultPostProcd").html(++numPostProcd);
+                }
+            }
+
+            currIdx += 3;
+
+            if (currIdx >= maxToScan) {
+                clearInterval(interval);
+            }
+        }
+
+        $(function() {
+            interval = setInterval(batchPostProcess, 3000);
+
+            $("#showHideFalsePos").click(function() {
+                hideFalsePos = false;
+                $('.falsePositive').removeClass('falsePositive');
+                $('#showHideFalsePos').html('');
+            });
+        });
+        </script>
+    {% endif %}
+{% endblock %}

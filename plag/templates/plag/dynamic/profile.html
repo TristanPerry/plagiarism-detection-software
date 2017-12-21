@@ -1,0 +1,69 @@
+{% extends 'plag/base_account.html' %}
+
+{% block title %}Profile &anp; Preferences{% endblock %}
+
+{% block desc %}Change your profile information and change preferences relating to how we display your plagiarism results.{% endblock %}
+
+{% block header_section %}
+    <style type="text/css">
+    label {
+        width: 15em;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Update Your Info</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <p>To update your profile information and preferences, please amend the details below.</p>
+
+    <form id="profileform" method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+
+        <h2>Profile</h2>
+        {{ form.as_p }}
+
+        <h2>Preferences</h2>
+        {{ pref_form.as_p }}
+
+        {% if not pass_form.errors %}
+            <p><a href="javascript:void(0);" id="change_password">Change Password</a></p>
+
+            <div style="display: none;" id="password_form">
+        {% endif %}
+
+            <h2>Change Password</h2>
+            {{ pass_form.as_p }}
+
+        {% if not pass_form.errors %}
+            </div>
+        {% endif %}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+
+
+{% block pagescripts %}
+    <script type="text/javascript">
+        $("#id_email").prop('required', true);
+
+        $("#change_password").click(function() {
+            $(this).hide(0);
+            $("#password_form").show(250);
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'changing_password',
+                value: 'true'
+            }).appendTo('form');
+        });
+    </script>
+{% endblock %}

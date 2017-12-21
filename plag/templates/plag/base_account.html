@@ -1,0 +1,21 @@
+{% extends 'plag/base.html' %}
+
+{% block page_id %}account{% endblock %}
+
+{% block title %}Account{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled">
+        <header>
+            <h2>Manage</h2>
+        </header>
+        <ul>
+            <li><a href="{% url 'account' %}">Account Home</a></li>
+            <li><a href="{% url 'profile' %}">Profile &amp; Preferences</a></li>
+            <li><a href="{% url 'recent_scans' 30 %}">Recent Scans</a></li>
+            <li><a href="{% url 'scan_history' %}">Scan History</a></li>
+            <li><a href="{% url 'protected_resources' %}" title="View your protected resources, and also change your order">Protected Resources</a></a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </section>
+{% endblock %}

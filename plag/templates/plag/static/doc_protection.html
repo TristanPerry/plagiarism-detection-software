@@ -1,0 +1,69 @@
+{% extends 'plag/base.html' %}
+{% load staticfiles %}
+
+{% block page_id %}products{% endblock %}
+
+{% block title %}Document Protection{% endblock %}
+
+{% block desc %}Our document protection can safeguard a range of document types from plagiarism, such as Word documents, Powerpoint presentations, PDFs and more. Plagiarism Guard is used by professional content authors such as journalists and companies, students, teachers and more.{% endblock %}
+
+{% block sidebar-content %}
+    <section class="box-titled hide-small-screen">
+        <header>
+            <h2>Contents</h2>
+        </header>
+        <ul>
+            <li><a href="#how_it_works">How it Works</a></li>
+            <li><a href="#how_to_order">How to Order</a>
+                <ul>
+                    <li><a href="#create_account">Create account &amp; checkout</a></li>
+                </ul>
+            </li>
+            <li><a href="#common_questions">Common Questions</a></li>
+        </ul>
+    </section>
+    <section class="box-titled">
+        <header>
+            <h2>Read More</h2>
+        </header>
+        {% include 'plag/common/products_links.html' %}
+    </section>
+{% endblock %}
+
+{% block content %}
+    <h1>Document Protection</h1>
+    <p>Our document protection can safeguard a range of document types from plagiarism, such as Word documents, Powerpoint presentations, PDFs and more. Plagiarism Guard is used by professional content authors such as journalists and companies, students, teachers and more.</p>
+    <p>You can choose to scan each document as frequently as you'd like - daily, weekly or monthly. Or you can 'mix and match' - for example, you can protect your most important content daily, other content weekly and your less important content monthly. This allows you to tailor your content's plagiarism detection to your exact needs.</p>
+    <a name="how_it_works"></a><h2>How it Works</h2>
+    <img src="{% static 'plag/img/Homepage_thumb.jpg'%}" class="lightboxImg imgFloatL" data-full-url="{% static 'plag/img/Homepage_full.jpg'%}" alt="Homepage screenshot" />
+    <p>Every day, week or month we scan &amp; analyse your documents and then we automatically scour the internet, comparing your content to billions of other items of content, to detect any possible instances of plagiarism and content theft.</p>
+    <p>Any possible matches are then run through our False Positive Protection technology to filter out any invalid plagiarism results, meaning that you will only see genuine cases of content theft.</p>
+    <p>We then report all plagiarism results in your account and (optionally) email you with our findings.</p>
+    <a name="how_to_order"></a><h2>How to Order</h2>
+    <p>Protecting your documents couldn't be easier. You can protect Word documents (.docx and .doc), Powerpoint presentations (.pptx), PDFs (.pdf) and text files (.txt):</p>
+    <img src="{% static 'plag/img/order_screens/Overall_thumb.jpg'%}" class="lightboxImg imgFloatL" data-full-url="{% static 'plag/img/order_screens/Overall_full.jpg'%}" alt="Order - overview of screen" />
+    <p>When <a href="{% url 'order' %}">placing an order</a>, click 'Choose File' and select a file from your computer, and then choose how often we should scan this document by selecting the relevant option in the scan frequency box that says 'Daily'.</p>
+    <p>To add more documents, click 'Add resource to protect' and a new row will appear. Click 'Choose File' from this new row, and change the scan frequency to suit your needs.</p>
+    <p>Repeat these steps until you have added all document that you would like to protect.</p>
+    <a name="create_account"></a><h3>Create account &amp; checkout</h3>
+    <p>Finally, enter your details in the 'Step 2 - Create an Account' section (you need an account to be able to view plagiarism results). 'Username', 'Email address' and 'Password' need to be filled in, whilst the first name and lastname fields are optional.</p>
+    <p>After entering a username, if a red cross appears, the username you have chosen is already in use - so you will need to choose another one. After choosing a password, re-enter it in the 'Password (confirm) box to ensure you have typed your password in correctly.</p>
+    <p>To finish, simply click 'Order' and your order will be placed and you will be taken to the payment page.</p>
+    <a name="common_questions"></a><h2>Common Questions</h2>
+    <p><strong>1) What document types are supported?</strong></p>
+    <p>You can protect Word documents (.docx and .doc), Powerpoint presentations (.pptx), PDFs (.pdf) and text files (.txt).</p>
+    <p><strong>2) Can I also protect websites?</strong></p>
+    <p>Yes, you can 'mix and match' and protect both web pages and <a href="{% url 'doc_prot' %}">documents</a>. When ordering click 'Add resource to protect' and you can choose either a website address (URL) or a file to protect.</p>
+    <p><strong>3) What payment methods do you accept?</strong></p>
+    <p>We accept payments via PayPal, through which you can pay from a range of sources - debit card, credit card, bank transfer and more. You don't need to register a PayPal account when paying through PayPal.</p>
+    <p><strong>4) Can I easily cancel my order?</strong></p>
+    <p>Yes. If you'd like to cancel for any reason, simply contact <a href="https://support.plagiarismguard.com/open.php">our billing department</a> and whilst we'll be sorry to see you go, we will take care of the rest. If you cancel in the first 30 days, you are entitled to a full refund through our 30 day money back guarantee.</p>
+    <p><strong>5) You don't support the file type my content is stored in?</strong></p>
+    <p>If your content is stored in a file type we don't support, please contact <a href="https://support.plagiarismguard.com/open.php">our sales department</a> and we'll do our best to help you - be it by exploring ways to convert the content to a supported file type, or asking our Developers to add support for the file type.</p>
+
+    {% include 'plag/common/order_call_to_action.html' %}
+{% endblock %}
+
+{% block otherelements %}
+    {% include 'plag/common/lightbox.html' %}
+{% endblock %}
