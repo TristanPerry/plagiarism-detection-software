@@ -3,7 +3,7 @@ import requests
 
 def run_request(queries, exclude_urls=[]):
     result = []
-    key = 'bw3ZaDEUr+iNxk5Bsanmx0MrPeRhXg8ALkD+LbGyeW0'
+    key = 'secret'
 
     for query in queries:
         api_result = requests.get(
