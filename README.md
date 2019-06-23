@@ -17,3 +17,17 @@ The files for this project are organised into three main folders:
  * /util/ - as covered a little above, these are a set of 'utilities' which perform the bulk of the plagiarism detection work.
 
 A further write-up of this project is available [on my personal site](https://www.tristanperry.com/python3/2017/12/21/plagiarism-guard-source-code.html).
+
+## Installing/running
+
+Since this was a project from 5+ years ago (and I only came across the code again a couple of years ago), I unfortunately don't have the full install/running instructions for this anymore. However you will see that this project is built around Django and has the relevant models and migrations folders to get the DB side of things setup.
+
+Equally I recently found the `requirements.txt` file which has now been committed, and this project was developed and ran against Python 3.4.
+
+This project can extract text (to check for plagiarism) from many file types, including .pdf and the old (non XML) Word .doc format. For these two formats, the following utilities were used:
+
+ * `pdftotext` which can be installed by `yum install poppler-utils` on Unix systems, whilst the .exe called `xpdfbin-win-3.04.zip` can be found online and installed for Windows.
+ * `antiword` which can be installed [from winfield](http://www.winfield.demon.nl/#Programmer){:target="_blank"} for Unix based systems (the Windows source for it worked in 2014 but it now returns a 404).
+ 
+Once the relevant dependencies are installed and Django is running, you will be able to add resources to protect/scan via the Django admin panel (or manually via SQL commands, of course) - and then the management commands can be triggered (manually or via a cron) to scan them and get the results.
+ 
